@@ -1,22 +1,40 @@
 package model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+@Entity
 public class Person {
-private final UUID id;
-private final String name;
-public Person(@JsonProperty("id") UUID id, 
-		@JsonProperty("name") String name) {
-	this.id = id;
-	this.name = name;
-}
-public UUID getId() {
-	return id;
-}
-public String getName() {
-	return name;
-}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    private String name;
 
+    // Default constructor (required by JPA)
+    public Person() {}
+
+    public Person(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    // Getters and setters
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

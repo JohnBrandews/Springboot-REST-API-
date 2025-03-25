@@ -1,35 +1,40 @@
 package service;
 
+import dao.PersonRepository;
+import model.Person;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import dao.PersonDao;
-import model.Person;
 @Service
 public class PersonService {
-private final PersonDao personDao;
-@Autowired
-public PersonService(@Qualifier("fakeDao")PersonDao personDao) {
-	this.personDao = personDao;
-}
-public int addPerson(Person person) {
-	return personDao.insertPerson(person);
-}
-public List<Person> getAllPeople(){
-	return personDao.selectAllPeople();
-}
-public Optional<Person> getPersonById(UUID id){
-	return personDao.selectPersonById(id);
-}
-public int deletePerson(UUID id) {
-	return personDao.deletPersonById(id);
-}
-public int updatePerson(UUID id,Person newPerson) {
-	return personDao.updatePersonalById(id, newPerson);
-}
+    private final PersonRepository personRepository;
+
+    @Autowired
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
+
+    public Person addPerson(Person person) {
+        return personRepository.save(person);
+    }
+
+    public List<Person> getAllPeople() {
+        return personRepository.findAll();
+    }
+
+    public Optional<Person> getPersonById(UUID id) {
+        return personRepository.findById(id);
+    }
+
+    public void deletePerson(UUID id) {
+        personRepository.deleteById(id);
+    }
+
+    public Person updatePerson(UUID id, Person newPerson) {
+        newPerson.setId(id); // Ensure the ID is set
+        return personRepository.save(newPerson);
+    }
 }
